@@ -1,0 +1,6 @@
+﻿@model List<HreflangLinkViewModel>
+
+@foreach (var item in Model)
+{
+    <link rel="alternate" hreflang="@item.Lang" href="@item.Url" />
+}
