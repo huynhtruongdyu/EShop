@@ -4,11 +4,6 @@
     {
         public const string DefaultCulture = "en-US";
 
-        public static readonly string[] SupportedCultures =
-        {
-                "en-US",
-                "vi-VN",
-                "fr-FR"
-            };
+        public static readonly string[] SupportedCultures = ["en-US", "vi-VN", "fr-FR"];
     }
 }

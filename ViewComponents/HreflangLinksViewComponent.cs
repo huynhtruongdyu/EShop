@@ -9,10 +9,24 @@
             var host = request.Host.Value;
             var path = request.Path.Value?.TrimStart('/');
 
-            var hreflangs = LocalizationConstants.SupportedCultures.Select(lang => new HreflangLinkViewModel(lang, $"{scheme}://{host}/{lang}/{path}")).ToList();
+            // Remove the current culture segment from the path
+            var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+            string pathWithoutCulture = path;
+
+            if (!string.IsNullOrEmpty(path) && path.StartsWith(currentCulture, StringComparison.OrdinalIgnoreCase))
+            {
+                pathWithoutCulture = path.Substring(currentCulture.Length).TrimStart('/');
+            }
+
+            var hreflangs = LocalizationConstants.SupportedCultures
+                .Select(lang => new HreflangLinkViewModel(
+                    lang,
+                    $"{scheme}://{host}/{lang}/{pathWithoutCulture}"
+                ))
+                .ToList();
 
             // Optionally add x-default
-            hreflangs.Insert(0, new HreflangLinkViewModel("x-default", $"{scheme}://{host}/{path}"));
+            hreflangs.Insert(0, new HreflangLinkViewModel("x-default", $"{scheme}://{host}/{pathWithoutCulture}"));
 
             return View(hreflangs);
         }
